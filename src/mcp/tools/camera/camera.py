@@ -188,3 +188,4 @@ def take_photo(arguments: dict) -> str:
 
     # 发送解释请求
     return camera.explain(question)
+

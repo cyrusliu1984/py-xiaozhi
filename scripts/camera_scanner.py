@@ -11,11 +11,12 @@ from pathlib import Path
 import cv2
 
 # 导入ConfigManager类
-from src.utils.config_manager import ConfigManager
 
 # 添加项目根目录到系统路径，以便导入src中的模块
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
+
+from src.utils.config_manager import ConfigManager
 
 # 设置日志记录
 logging.basicConfig(

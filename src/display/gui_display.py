@@ -2,6 +2,7 @@ import os
 from abc import ABCMeta
 from pathlib import Path
 from typing import Callable, Optional
+import subprocess
 
 from PyQt5.QtCore import QObject, Qt
 from PyQt5.QtGui import QFont, QKeySequence, QMovie, QPixmap
@@ -62,6 +63,31 @@ class GuiDisplay(BaseDisplay, QObject, metaclass=CombinedMeta):
 
         # 系统托盘组件
         self.system_tray = None
+
+        # 表情映射
+        self.emotion_mapping = {
+            "angry": "close",
+            "confident": "smile",
+            "confused": "shake",
+            "cool": "smile",
+            "crying": "close",
+            "delicious": "look",
+            "embarrassed": "smile",
+            "funny": "happy",
+            "happy": "happy",
+            "kissy": "lovely",
+            "laughing": "happy",
+            "loving": "lovely",
+            "neutral": "look",
+            "relaxed": "smile",
+            "sad": "close",
+            "shocked": "shake",
+            "silly": "happy",  
+            "sleepy": "look",
+            "surprised": "happy",
+            "thinking": "shake",
+            "winking": "happy"
+        }
 
     async def set_callbacks(
         self,
@@ -189,8 +215,25 @@ class GuiDisplay(BaseDisplay, QObject, metaclass=CombinedMeta):
         if self.emotion_label:
             try:
                 self._set_emotion_asset(self.emotion_label, asset_path)
+
             except Exception as e:
                 self.logger.error(f"设置表情GIF时发生错误: {str(e)}")
+        try:
+            # 从映射字典中获取目标表情
+            target_emotion = self.emotion_mapping.get(emotion_name, "look")  # 默认映射到 "look"
+            if emotion_name == "neutral":  # 确保 "neutral" 统一映射到 "look"
+                target_emotion = "look"
+
+            # 构建bash命令（向 /dev/ttyACM0 写入目标表情）
+            bash_cmd = f'sudo bash -c \'echo -n "{target_emotion}" > /dev/ttyACM0\''
+            # 执行命令（shell=True 启用bash解释器，check=True 命令失败时抛出异常）
+            subprocess.run(bash_cmd, shell=True, check=True)
+            self.logger.info(f"成功执行bash命令：{bash_cmd}（表情 {emotion_name} → {target_emotion}）")
+        except subprocess.CalledProcessError as e:
+            self.logger.error(f"bash命令执行失败（返回码 {e.returncode}）: {e}")
+        except Exception as e:
+            self.logger.error(f"执行bash命令时发生未知错误: {e}")
+
 
     def _get_emotion_asset_path(self, emotion_name: str) -> str:
         """

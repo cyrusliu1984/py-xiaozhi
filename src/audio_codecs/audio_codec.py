@@ -148,13 +148,94 @@ class AudioCodec:
                 f"输出重采样: {AudioConfig.OUTPUT_SAMPLE_RATE}Hz -> {self.device_output_sample_rate}Hz"
             )
 
+    # async def _select_audio_devices(self):
+    #     """
+    #     显示并选择音频设备.
+    #     优先使用配置文件中的设备，如果没有则使用默认设备并保存到配置.
+    #     """
+    #     try:
+    #         # 尝试从配置文件读取音频设备设置
+    #         audio_config = self.config.get_config("AUDIO_DEVICES", {})
+            
+    #         input_device_id = audio_config.get("input_device_id")
+    #         output_device_id = audio_config.get("output_device_id")
+            
+    #         devices = sd.query_devices()
+            
+    #         # 验证配置中的输入设备是否有效
+    #         if input_device_id is not None:
+    #             try:
+    #                 if 0 <= input_device_id < len(devices):
+    #                     device_info = devices[input_device_id]
+    #                     if device_info['max_input_channels'] > 0:
+    #                         self.mic_device_id = input_device_id
+    #                         logger.info(f"使用配置的麦克风设备: [{input_device_id}] {device_info['name']}")
+    #                     else:
+    #                         logger.warning(f"配置的设备[{input_device_id}]不支持输入，使用默认设备")
+    #                         input_device_id = None
+    #                 else:
+    #                     logger.warning(f"配置的设备ID[{input_device_id}]无效，使用默认设备")
+    #                     input_device_id = None
+    #             except Exception as e:
+    #                 logger.warning(f"验证配置输入设备失败: {e}，使用默认设备")
+    #                 input_device_id = None
+            
+    #         # 验证配置中的输出设备是否有效
+    #         if output_device_id is not None:
+    #             try:
+    #                 if 0 <= output_device_id < len(devices):
+    #                     device_info = devices[output_device_id]
+    #                     if device_info['max_output_channels'] > 0:
+    #                         self.speaker_device_id = output_device_id
+    #                         logger.info(f"使用配置的扬声器设备: [{output_device_id}] {device_info['name']}")
+    #                     else:
+    #                         logger.warning(f"配置的设备[{output_device_id}]不支持输出，使用默认设备")
+    #                         output_device_id = None
+    #                 else:
+    #                     logger.warning(f"配置的输出设备ID[{output_device_id}]无效，使用默认设备")
+    #                     output_device_id = None
+    #             except Exception as e:
+    #                 logger.warning(f"验证配置输出设备失败: {e}，使用默认设备")
+    #                 output_device_id = None
+            
+    #         # 如果配置中没有有效设备，使用系统默认设备
+    #         if input_device_id is None or output_device_id is None:
+    #             default_input = sd.default.device[0] if sd.default.device else None
+    #             default_output = sd.default.device[1] if sd.default.device else None
+                
+    #             # 处理输入设备
+    #             if input_device_id is None and default_input is not None:
+    #                 self.mic_device_id = default_input
+    #                 input_device_info = devices[default_input]
+    #                 logger.info(f"使用系统默认麦克风设备: [{default_input}] {input_device_info['name']}")
+    #             elif input_device_id is None:
+    #                 logger.warning("无法获取默认输入设备")
+    #                 self.mic_device_id = None
+                
+    #             # 处理输出设备
+    #             if output_device_id is None and default_output is not None:
+    #                 self.speaker_device_id = default_output
+    #                 output_device_info = devices[default_output]
+    #                 logger.info(f"使用系统默认扬声器设备: [{default_output}] {output_device_info['name']}")
+    #             elif output_device_id is None:
+    #                 logger.warning("无法获取默认输出设备")
+    #                 self.speaker_device_id = None
+                
+    #             # 首次运行时或设备ID为None时保存默认设备到配置文件
+    #             if (
+    #                 audio_config.get("input_device_id") is None
+    #                 or audio_config.get("output_device_id") is None
+    #             ) and (
+    #                 default_input is not None or default_output is not None
+    #             ):
+    #                 await self._save_default_audio_config(default_input, default_output)
+
+    #     except Exception as e:
+    #         logger.warning(f"设备选择失败: {e}，使用默认设备")
+    #         self.mic_device_id = None
+
     async def _select_audio_devices(self):
-        """
-        显示并选择音频设备.
-        优先使用配置文件中的设备，如果没有则使用默认设备并保存到配置.
-        """
         try:
-            # 尝试从配置文件读取音频设备设置
             audio_config = self.config.get_config("AUDIO_DEVICES", {})
             
             input_device_id = audio_config.get("input_device_id")
@@ -162,66 +243,106 @@ class AudioCodec:
             
             devices = sd.query_devices()
             
-            # 验证配置中的输入设备是否有效
+            # 验证配置的输入设备是否有效（支持整数ID和字符串标识）
             if input_device_id is not None:
                 try:
-                    if 0 <= input_device_id < len(devices):
-                        device_info = devices[input_device_id]
-                        if device_info['max_input_channels'] > 0:
-                            self.mic_device_id = input_device_id
-                            logger.info(f"使用配置的麦克风设备: [{input_device_id}] {device_info['name']}")
+                    # 情况1：设备ID是整数（如4、29）
+                    if isinstance(input_device_id, int):
+                        if 0 <= input_device_id < len(devices):
+                            device_info = devices[input_device_id]
+                            if device_info['max_input_channels'] > 0:
+                                self.mic_device_id = input_device_id
+                                logger.info(f"使用配置的麦克风设备: [{input_device_id}] {device_info['name']}")
+                            else:
+                                logger.warning(f"配置的设备[{input_device_id}]不支持输入，使用默认设备")
+                                input_device_id = None
                         else:
-                            logger.warning(f"配置的设备[{input_device_id}]不支持输入，使用默认设备")
+                            logger.warning(f"配置的设备ID[{input_device_id}]无效，使用默认设备")
                             input_device_id = None
+                    
+                    # 情况2：设备ID是字符串（如"hw:2,0"）
+                    elif isinstance(input_device_id, str):
+                        # 直接使用字符串标识，不做范围检查（由sounddevice内部验证）
+                        # 尝试查询设备信息，确认是否存在
+                        try:
+                            device_info = sd.query_devices(input_device_id)
+                            if device_info['max_input_channels'] > 0:
+                                self.mic_device_id = input_device_id
+                                logger.info(f"使用配置的麦克风设备: {input_device_id} ({device_info['name']})")
+                            else:
+                                logger.warning(f"配置的设备[{input_device_id}]不支持输入，使用默认设备")
+                                input_device_id = None
+                        except ValueError:
+                            logger.warning(f"配置的设备[{input_device_id}]不存在，使用默认设备")
+                            input_device_id = None
+                    
+                    # 其他类型（如float）视为无效
                     else:
-                        logger.warning(f"配置的设备ID[{input_device_id}]无效，使用默认设备")
+                        logger.warning(f"配置的设备ID类型无效（{type(input_device_id)}），使用默认设备")
                         input_device_id = None
+                
                 except Exception as e:
                     logger.warning(f"验证配置输入设备失败: {e}，使用默认设备")
                     input_device_id = None
             
-            # 验证配置中的输出设备是否有效
+            # 验证配置的输出设备是否有效（逻辑与输入设备相同）
             if output_device_id is not None:
                 try:
-                    if 0 <= output_device_id < len(devices):
-                        device_info = devices[output_device_id]
-                        if device_info['max_output_channels'] > 0:
-                            self.speaker_device_id = output_device_id
-                            logger.info(f"使用配置的扬声器设备: [{output_device_id}] {device_info['name']}")
+                    if isinstance(output_device_id, int):
+                        if 0 <= output_device_id < len(devices):
+                            device_info = devices[output_device_id]
+                            if device_info['max_output_channels'] > 0:
+                                self.speaker_device_id = output_device_id
+                                logger.info(f"使用配置的扬声器设备: [{output_device_id}] {device_info['name']}")
+                            else:
+                                logger.warning(f"配置的设备[{output_device_id}]不支持输出，使用默认设备")
+                                output_device_id = None
                         else:
-                            logger.warning(f"配置的设备[{output_device_id}]不支持输出，使用默认设备")
+                            logger.warning(f"配置的输出设备ID[{output_device_id}]无效，使用默认设备")
                             output_device_id = None
+                    
+                    elif isinstance(output_device_id, str):
+                        try:
+                            device_info = sd.query_devices(output_device_id)
+                            if device_info['max_output_channels'] > 0:
+                                self.speaker_device_id = output_device_id
+                                logger.info(f"使用配置的扬声器设备: {output_device_id} ({device_info['name']})")
+                            else:
+                                logger.warning(f"配置的设备[{output_device_id}]不支持输出，使用默认设备")
+                                output_device_id = None
+                        except ValueError:
+                            logger.warning(f"配置的设备[{output_device_id}]不存在，使用默认设备")
+                            output_device_id = None
+                    
                     else:
-                        logger.warning(f"配置的输出设备ID[{output_device_id}]无效，使用默认设备")
+                        logger.warning(f"配置的输出设备ID类型无效（{type(output_device_id)}），使用默认设备")
                         output_device_id = None
+                
                 except Exception as e:
                     logger.warning(f"验证配置输出设备失败: {e}，使用默认设备")
                     output_device_id = None
             
-            # 如果配置中没有有效设备，使用系统默认设备
+            # 以下为原逻辑（使用默认设备 + 保存配置），无需修改
             if input_device_id is None or output_device_id is None:
                 default_input = sd.default.device[0] if sd.default.device else None
                 default_output = sd.default.device[1] if sd.default.device else None
                 
-                # 处理输入设备
                 if input_device_id is None and default_input is not None:
                     self.mic_device_id = default_input
-                    input_device_info = devices[default_input]
+                    input_device_info = devices[default_input] if isinstance(default_input, int) else sd.query_devices(default_input)
                     logger.info(f"使用系统默认麦克风设备: [{default_input}] {input_device_info['name']}")
                 elif input_device_id is None:
                     logger.warning("无法获取默认输入设备")
                     self.mic_device_id = None
                 
-                # 处理输出设备
                 if output_device_id is None and default_output is not None:
                     self.speaker_device_id = default_output
-                    output_device_info = devices[default_output]
+                    output_device_info = devices[default_output] if isinstance(default_output, int) else sd.query_devices(default_output)
                     logger.info(f"使用系统默认扬声器设备: [{default_output}] {output_device_info['name']}")
                 elif output_device_id is None:
                     logger.warning("无法获取默认输出设备")
                     self.speaker_device_id = None
                 
-                # 首次运行时或设备ID为None时保存默认设备到配置文件
                 if (
                     audio_config.get("input_device_id") is None
                     or audio_config.get("output_device_id") is None
@@ -233,6 +354,7 @@ class AudioCodec:
         except Exception as e:
             logger.warning(f"设备选择失败: {e}，使用默认设备")
             self.mic_device_id = None
+
     
     async def _save_default_audio_config(self, input_device_id, output_device_id):
         """
