@@ -9,12 +9,15 @@ logger = get_logger(__name__)
 
 BASE_URL = os.getenv("KNOWLEDGE_BASE_URL", "http://localhost:8080/api/v1")
 API_KEY = os.getenv("KNOWLEDGE_API_KEY", "sk-W1BUWaIuoac11EGT6eO-6mwihz_q9QK_Eokrh-fHK-mSeJ6T")
+kb_chat_id = "a54ec473-478a-4358-b2fa-0c19337abc60"
+
+
 def knowledge_chat(kb_chat_id: str, query: str) -> dict:
     """
     调用知识库对话接口，获取流式回答及引用来源
     
     参数:
-        kb_chat_id: 知识库对话ID（用于上下文关联）
+        kb_chat_id: 知识库对话ID（用于上下文关联）S
         query: 用户的查询问题（需要向知识库提问的内容）
     
     返回:
@@ -74,8 +77,9 @@ def knowledge_chat(kb_chat_id: str, query: str) -> dict:
         return {"success": False, "error": {"message": f"请求失败: {str(e)}"}}
     except Exception as e:
         return {"success": False, "error": {"message": f"处理失败: {str(e)}"}}
+    
+
 async def KnowledgeBase(args: dict) -> str:
-    kb_chat_id = "a54ec473-478a-4358-b2fa-0c19337abc60"
     try:
         # 业务逻辑
         param1 = args.get("param1", 0)

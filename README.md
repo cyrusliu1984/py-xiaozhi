@@ -1,29 +1,3 @@
-<p align="center" class="trendshift">
-  <a href="https://trendshift.io/repositories/14130" target="_blank">
-    <img src="https://trendshift.io/api/badge/repositories/14130" alt="Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/>
-  </a>
-</p>
-<p align="center">
-  <a href="https://github.com/huangjunsen0406/py-xiaozhi/releases/latest">
-    <img src="https://img.shields.io/github/v/release/huangjunsen0406/py-xiaozhi?style=flat-square&logo=github&color=blue" alt="Release"/>
-  </a>
-  <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License: MIT"/>
-  </a>
-  <a href="https://github.com/huangjunsen0406/py-xiaozhi/stargazers">
-    <img src="https://img.shields.io/github/stars/huangjunsen0406/py-xiaozhi?style=flat-square&logo=github" alt="Stars"/>
-  </a>
-  <a href="https://github.com/huangjunsen0406/py-xiaozhi/releases/latest">
-    <img src="https://img.shields.io/github/downloads/huangjunsen0406/py-xiaozhi/total?style=flat-square&logo=github&color=52c41a1&maxAge=86400" alt="Download"/>
-  </a>
-  <a href="https://gitee.com/huang-jun-sen/py-xiaozhi">
-    <img src="https://img.shields.io/badge/Gitee-FF5722?style=flat-square&logo=gitee" alt="Gitee"/>
-  </a>
-  <a href="https://huangjunsen0406.github.io/py-xiaozhi/guide/00_%E6%96%87%E6%A1%A3%E7%9B%AE%E5%BD%95.html">
-    <img alt="使用文档" src="https://img.shields.io/badge/使用文档-点击查看-blue?labelColor=2d2d2d" />
-  </a>
-</p>
-
 简体中文 | [English](README.en.md)
 
 ## 项目简介
@@ -58,51 +32,11 @@ py-xiaozhi 是一个使用 Python 实现的小智语音客户端，旨在通过�
 - **地图工具**：高德地图服务，支持地理编码、路径规划、周边搜索、天气查询
 - **八字命理工具**：传统八字命理分析，支持八字计算、婚姻分析、黄历查询
 - **摄像头工具**：图像捕获和AI分析，支持拍照识别和智能问答
+- **🎯动作工具**：通过udp调用，可以配合青龙lite完成10种上肢动作|[新增功能](documents/docs/mcp/action/青龙lite%20语音控制文档.docx)
+- **🎯表情工具**：配合青龙lite切换表情|[新增功能](documents/docs/mcp/action/小智设备麦克风配置与问题解决说明文档.docx)
+- **🎯导航工具**：通过调用VLN大模型完成导航任务|[新增功能](documents/docs/mcp/navigation/demo.webm)
+- **🎯知识库工具**：配合WeKnora搭建本地知识库 [新增功能](documents/docs/mcp/knowledgebase/小智知识库mcp%20说明文档.docx)
 
-### 🏠 IoT设备集成
-
-- **设备管理架构**：基于Thing模式的统一设备管理，支持属性和方法的异步调用
-- **智能家居控制**：支持灯光、音量、温度传感器等设备控制
-- **状态同步机制**：实时状态监控，支持增量更新和并发状态获取
-- **可扩展设计**：模块化设备驱动，易于添加新设备类型
-
-### 🎵 高级音频处理
-
-- **多级音频处理**：支持Opus编解码、实时重采样
-- **语音活动检测**：VAD检测器实现智能打断，支持语音活动实时监控
-- **唤醒词检测**：基于Sherpa-ONNX的离线语音识别，支持多唤醒词和拼音匹配
-- **音频流管理**：独立输入输出流，支持流重建和错误恢复
-- **音频回声消除**：集成WebRTC音频处理模块，提供高质量的回声消除功能
-- **系统音频录制**：支持系统音频录制，实现音频环回处理
-
-### 🖥️ 用户界面
-
-- **图形化界面**：基于PyQt5的现代GUI，支持小智表情与文本显示，增强视觉体验
-- **命令行模式**：支持CLI运行，适用于嵌入式设备或无GUI环境
-- **系统托盘**：后台运行支持，集成系统托盘功能
-- **全局快捷键**：支持全局快捷键操作，提升使用便捷性
-- **设置界面**：完整的设置管理界面，支持配置自定义
-
-### 🔒 安全与稳定
-
-- **加密音频传输**：支持WSS协议，保障音频数据的安全性，防止信息泄露
-- **设备激活系统**：支持v1/v2双协议激活，自动处理验证码和设备指纹
-- **错误恢复**：完整的错误处理和恢复机制，支持断线重连
-
-### 🌐 跨平台支持
-
-- **系统兼容**：兼容Windows 10+、macOS 10.15+和Linux系统
-- **协议支持**：支持WebSocket和MQTT双协议通信
-- **多环境部署**：支持GUI和CLI双模式，适应不同部署环境
-- **平台优化**：针对不同平台的音频和系统控制优化
-
-### 🔧 开发友好
-
-- **模块化架构**：清晰的代码结构和职责分离，便于二次开发
-- **异步优先**：基于asyncio的事件驱动架构，高性能并发处理
-- **配置管理**：分层配置系统，支持点记法访问和动态更新
-- **日志系统**：完整的日志记录和调试支持
-- **API文档**：详细的代码文档和使用指南
 
 ## 系统要求
 
@@ -132,35 +66,6 @@ py-xiaozhi 是一个使用 Python 实现的小智语音客户端，旨在通过�
 
 [从零开始使用小智客户端（视频教程）](https://www.bilibili.com/video/BV1dWQhYEEmq/?vd_source=2065ec11f7577e7107a55bbdc3d12fce)
 
-## 技术架构
-
-### 核心架构设计
-
-- **事件驱动架构**: 基于asyncio的异步事件循环，支持高并发处理
-- **分层设计**: 清晰的应用层、协议层、设备层、UI层分离
-- **单例模式**: 核心组件采用单例模式，确保资源统一管理
-- **插件化**: MCP工具系统和IoT设备支持插件化扩展
-
-### 关键技术组件
-
-- **音频处理**: Opus编解码、WebRTC回声消除、实时重采样、系统音频录制
-- **语音识别**: Sherpa-ONNX离线模型、语音活动检测、唤醒词识别
-- **协议通信**: WebSocket/MQTT双协议支持、加密传输、自动重连
-- **配置系统**: 分层配置、点记法访问、动态更新、JSON/YAML支持
-
-### 性能优化
-
-- **异步优先**: 全系统异步架构，避免阻塞操作
-- **内存管理**: 智能缓存、垃圾回收
-- **音频优化**: 5ms低延迟处理、队列管理、流式传输
-- **并发控制**: 任务池管理、信号量控制、线程安全
-
-### 安全机制
-
-- **加密通信**: WSS/TLS加密、证书验证
-- **设备认证**: 双协议激活、设备指纹识别
-- **权限控制**: 工具权限管理、API访问控制
-- **错误隔离**: 异常隔离、故障恢复、优雅降级
 
 ## 开发指南
 
@@ -258,49 +163,6 @@ python main.py --protocol mqtt       # MQTT协议
      完成播放 +------------+
 ```
 
-## 贡献指南
-
-欢迎提交问题报告和代码贡献。请确保遵循以下规范：
-
-1. 代码风格符合PEP8规范
-2. 提交的PR包含适当的测试
-3. 更新相关文档
-
-## 社区与支持
-
-### 感谢以下开源人员
->
-> 排名不分前后
-
-[Xiaoxia](https://github.com/78)
-[zhh827](https://github.com/zhh827)
-[四博智联-李洪刚](https://github.com/SmartArduino)
-[HonestQiao](https://github.com/HonestQiao)
-[vonweller](https://github.com/vonweller)
-[孙卫公](https://space.bilibili.com/416954647)
-[isamu2025](https://github.com/isamu2025)
-[Rain120](https://github.com/Rain120)
-[kejily](https://github.com/kejily)
-[电波bilibili君](https://space.bilibili.com/119751)
-[赛搏智能](https://shop115087494.m.taobao.com/?refer=https%3A%2F%2Fm.tb.cn%2F&ut_sk=1.WMelxbgDQWkDAJ1Rq9Pn7DCD_21380790_1757337352472.Copy.shop&suid=0E25E948-651D-46E0-8E89-5C8CB03B4F56&shop_navi=shopindex&sourceType=shop&shareUniqueId=33038752403&un=d22c5ceda82844ab8bd7bab98ffeb263&share_crt_v=1&un_site=0&spm=a2159r.13376460.0.0&sp_tk=dkRKUjRKUWo2ZHY%3D&bc_fl_src=share-1041250486811064-2-1&cpp=1&shareurl=true&short_name=h.SaBKVHytsCKIPNS&bxsign=scdGtSe264e_qkFQBh0rXCkF-Mrb_s6t35EnpVBBU5dsrd-J24c-_rn_PhJiXRk0hg2hjGoAm0L7j2UQg27OIH_6gZkbhKDyLziD2cy4pDf8sC3KmqrF55TXP3USZaPTw_-&app=weixin)
-
-### 赞助支持
-
-<div align="center">
-  <h3>感谢所有赞助者的支持 ❤️</h3>
-  <p>无论是接口资源、设备兼容测试还是资金支持，每一份帮助都让项目更加完善</p>
-  
-  <a href="https://huangjunsen0406.github.io/py-xiaozhi/sponsors/" target="_blank">
-    <img src="https://img.shields.io/badge/查看-赞助者名单-brightgreen?style=for-the-badge&logo=github" alt="赞助者名单">
-  </a>
-  <a href="https://huangjunsen0406.github.io/py-xiaozhi/sponsors/" target="_blank">
-    <img src="https://img.shields.io/badge/成为-项目赞助者-orange?style=for-the-badge&logo=heart" alt="成为赞助者">
-  </a>
-</div>
-
-## 项目统计
-
-[![Star History Chart](https://api.star-history.com/svg?repos=huangjunsen0406/py-xiaozhi&type=Date)](https://www.star-history.com/#huangjunsen0406/py-xiaozhi&Date)
 
 ## 许可证
 
