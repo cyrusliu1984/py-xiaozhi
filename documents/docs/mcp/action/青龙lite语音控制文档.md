@@ -363,3 +363,11 @@ def \_register\_action\_cheer\_up(self, add\_tool, PropertyList, Property, Prope
 
 \==================================================
 ```
+
+<video 
+  src="demo.mp4"  
+  controls                              
+  width="100%"                                 
+>
+  您的设备不支持视频播放
+</video>
