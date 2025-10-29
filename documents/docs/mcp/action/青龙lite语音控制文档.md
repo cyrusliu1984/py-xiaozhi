@@ -133,163 +133,163 @@ logger = logging.getLogger(\_\_name\_\_)
 
 class WebUdpController:
 
-&#x20;   def \_\_init\_\_(self, local\_bind\_ip: str = "0.0.0.0", local\_bind\_port: int = 0):
+       def \_\_init\_\_(self, local\_bind\_ip: str = "0.0.0.0", local\_bind\_port: int = 0):
 
-&#x20;       """初始化UDP控制器，固定目标地址为192.168.1.100:8889"""
+           """初始化UDP控制器，固定目标地址为192.168.1.100:8889"""
 
-&#x20;       try:
+           try:
 
-&#x20;           # 创建UDP Socket并绑定本地地址
+               # 创建UDP Socket并绑定本地地址
 
-&#x20;           self.sock = socket.socket(socket.AF\_INET, socket.SOCK\_DGRAM)
+               self.sock = socket.socket(socket.AF\_INET, socket.SOCK\_DGRAM)
 
-&#x20;           self.sock.setsockopt(socket.SOL\_SOCKET, socket.SO\_REUSEADDR, 1)
+               self.sock.setsockopt(socket.SOL\_SOCKET, socket.SO\_REUSEADDR, 1)
 
-&#x20;           self.sock.bind((local\_bind\_ip, local\_bind\_port))
+               self.sock.bind((local\_bind\_ip, local\_bind\_port))
 
-&#x20;           self.local\_ip, self.local\_port = self.sock.getsockname()
+               self.local\_ip, self.local\_port = self.sock.getsockname()
 
-&#x20;           logger.info(f"✅ UDP控制器初始化完成 | 本地绑定：{self.local\_ip}:{self.local\_port}")
+               logger.info(f"✅ UDP控制器初始化完成 | 本地绑定：{self.local\_ip}:{self.local\_port}")
 
-&#x20;          &#x20;
+                  
 
-&#x20;           # 固定目标地址（用户需求：192.168.1.100:8889）
+               # 固定目标地址（用户需求：192.168.1.100:8889）
 
-&#x20;           self.target\_ip = "192.168.1.100"
+               self.target\_ip = "192.168.1.100"
 
-&#x20;           self.target\_port = 8889
+               self.target\_port = 8889
 
-&#x20;           logger.info(f"🎯 目标地址已固定：{self.target\_ip}:{self.target\_port}")
+               logger.info(f"🎯 目标地址已固定：{self.target\_ip}:{self.target\_port}")
 
-&#x20;       except Exception as e:
+           except Exception as e:
 
-&#x20;           logger.error(f"❌ UDP控制器初始化失败：{str(e)}", exc\_info=True)
+               logger.error(f"❌ UDP控制器初始化失败：{str(e)}", exc\_info=True)
 
-&#x20;           raise
+               raise
 
-&#x20;       self.lock = threading.Lock()
+           self.lock = threading.Lock()
 
-&#x20;   def close(self):
+       def close(self):
 
-&#x20;       """关闭Socket释放资源"""
+           """关闭Socket释放资源"""
 
-&#x20;       if self.sock:
+           if self.sock:
 
-&#x20;           self.sock.close()
+               self.sock.close()
 
-&#x20;           logger.info(f"🔌 UDP Socket已关闭 | 本地：{self.local\_ip}:{self.local\_port}")
+               logger.info(f"🔌 UDP Socket已关闭 | 本地：{self.local\_ip}:{self.local\_port}")
 
-&#x20;   def send\_int\_data(self, data: int, timeout: float = 5.0, add\_newline: bool = False) -> bool:
+       def send\_int\_data(self, data: int, timeout: float = 5.0, add\_newline: bool = False) -> bool:
 
-&#x20;       """
+           """
 
-&#x20;       按文本发送，例如 "201"（默认不带换行）。设 add\_newline=True 可发送 "201\n"。
+           按文本发送，例如 "201"（默认不带换行）。设 add\_newline=True 可发送 "201\n"。
 
-&#x20;       """
+           """
 
-&#x20;       try:
+           try:
 
-&#x20;           with self.lock:
+               with self.lock:
 
-&#x20;               if not isinstance(data, int):
+                   if not isinstance(data, int):
 
-&#x20;                   logger.error(f"❌ 发送数据必须是整数，当前类型：{type(data)}")
+                       logger.error(f"❌ 发送数据必须是整数，当前类型：{type(data)}")
 
-&#x20;                   return False
+                       return False
 
-&#x20;               # 修复 f-string 报错问题
+                   # 修复 f-string 报错问题
 
-&#x20;               newline = "\n" if add\_newline else ""
+                   newline = "\n" if add\_newline else ""
 
-&#x20;               payload = f"{data}{newline}"
+                   payload = f"{data}{newline}"
 
-&#x20;               data\_packet = payload.encode("ascii")
+                   data\_packet = payload.encode("ascii")
 
-&#x20;               packet\_size = len(data\_packet)
+                   packet\_size = len(data\_packet)
 
-&#x20;               logger.debug(f"📦 数据包 | 类型：text | 内容：{repr(payload)} | 大小：{packet\_size}字节")
+                   logger.debug(f"📦 数据包 | 类型：text | 内容：{repr(payload)} | 大小：{packet\_size}字节")
 
-&#x20;               self.sock.settimeout(timeout)
+                   self.sock.settimeout(timeout)
 
-&#x20;               logger.info(f"🚀 发送文本 {repr(payload)} -> {self.target\_ip}:{self.target\_port} | 超时：{timeout}秒")
+                   logger.info(f"🚀 发送文本 {repr(payload)} -> {self.target\_ip}:{self.target\_port} | 超时：{timeout}秒")
 
-&#x20;               sent\_bytes = self.sock.sendto(data\_packet, (self.target\_ip, self.target\_port))
+                   sent\_bytes = self.sock.sendto(data\_packet, (self.target\_ip, self.target\_port))
 
-&#x20;               if sent\_bytes != packet\_size:
+                   if sent\_bytes != packet\_size:
 
-&#x20;                   logger.warning(f"⚠️  发送不完整！预期{packet\_size}字节，实际{sent\_bytes}字节")
+                       logger.warning(f"⚠️  发送不完整！预期{packet\_size}字节，实际{sent\_bytes}字节")
 
-&#x20;                   return False
+                       return False
 
-&#x20;               logger.info(f"✅ 发送成功：{repr(payload)}")
+                   logger.info(f"✅ 发送成功：{repr(payload)}")
 
-&#x20;               return True
+                   return True
 
-&#x20;       except socket.timeout:
+           except socket.timeout:
 
-&#x20;           logger.error(f"⏱️  发送超时！{timeout}秒内未完成")
+               logger.error(f"⏱️  发送超时！{timeout}秒内未完成")
 
-&#x20;           return False
+               return False
 
-&#x20;       except PermissionError:
+           except PermissionError:
 
-&#x20;           logger.error(f"🚫 无权限发送！尝试用 sudo 运行脚本")
+               logger.error(f"🚫 无权限发送！尝试用 sudo 运行脚本")
 
-&#x20;           return False
+               return False
 
-&#x20;       except OSError as e:
+           except OSError as e:
 
-&#x20;           logger.error(f"🌐 网络错误：{str(e)}", exc\_info=True)
+               logger.error(f"🌐 网络错误：{str(e)}", exc\_info=True)
 
-&#x20;           return False
+               return False
 
-&#x20;       except Exception as e:
+           except Exception as e:
 
-&#x20;           logger.error(f"❌ 发送异常：{str(e)}", exc\_info=True)
+               logger.error(f"❌ 发送异常：{str(e)}", exc\_info=True)
 
-&#x20;           return False
+               return False
 
 async def right\_handshake(args: dict) -> str:
 
-&#x20;   """发送整数201的异步函数（右手握手动作）"""
+       """发送整数201的异步函数（右手握手动作）"""
 
-&#x20;   controller = None
+       controller = None
 
-&#x20;   try:
+       try:
 
-&#x20;       # 初始化控制器（本地端口随机，不影响发送）
+           # 初始化控制器（本地端口随机，不影响发送）
 
-&#x20;       controller = WebUdpController()
+           controller = WebUdpController()
 
-&#x20;       # 发送整数201（对应右手握手动作）
+           # 发送整数201（对应右手握手动作）
 
-&#x20;       logger.info(f"📢 开始执行发送整数201的任务（右手握手）")
+           logger.info(f"📢 开始执行发送整数201的任务（右手握手）")
 
-&#x20;       result = await asyncio.to\_thread(
+           result = await asyncio.to\_thread(
 
-&#x20;           controller.send\_int\_data,
+               controller.send\_int\_data,
 
-&#x20;           data=201,  # 固定发送201
+               data=201,  # 固定发送201
 
-&#x20;           timeout=10.0
+               timeout=10.0
 
-&#x20;       )
+           )
 
-&#x20;       return f"\n【最终结果】\n整数201发送到{controller.target\_ip}:{controller.target\_port}：{'成功' if result else '失败'}"
+           return f"\n【最终结果】\n整数201发送到{controller.target\_ip}:{controller.target\_port}：{'成功' if result else '失败'}"
 
-&#x20;   except Exception as e:
+       except Exception as e:
 
-&#x20;       err\_msg = f"\n【最终结果】\n发送失败：{str(e)}\n建议查看上方日志排查问题！"
+           err\_msg = f"\n【最终结果】\n发送失败：{str(e)}\n建议查看上方日志排查问题！"
 
-&#x20;       logger.error(err\_msg, exc\_info=True)
+           logger.error(err\_msg, exc\_info=True)
 
-&#x20;       return err\_msg
+           return err\_msg
 
-&#x20;   finally:
+       finally:
 
-&#x20;       if controller:
+           if controller:
 
-&#x20;           controller.close()
+               controller.close()
 ```
 
 ### 3.4 MCP 工具调用示例（Python）
@@ -299,55 +299,55 @@ async def right\_handshake(args: dict) -> str:
 ```
 def \_register\_action\_cheer\_up(self, add\_tool, PropertyList, Property, PropertyType):
 
-&#x20;   """注册“加油鼓励”动作的MCP工具"""
+       """注册“加油鼓励”动作的MCP工具"""
 
-&#x20;   props = PropertyList(
+       props = PropertyList(
 
-&#x20;       \[
+           \[
 
-&#x20;           Property(
+               Property(
 
-&#x20;               "query",  # 触发调用的指令参数（修正原参数名拼写错误）
+                   "query",  # 触发调用的指令参数（修正原参数名拼写错误）
 
-&#x20;               PropertyType.STRING,
+                   PropertyType.STRING,
 
-&#x20;           )
+               )
 
-&#x20;       ]
+           ]
 
-&#x20;   )
+       )
 
-&#x20;  &#x20;
+          
 
-&#x20;   tool\_description ='''
+       tool\_description ='''
 
-&#x20;           处理机器人双手向上欢呼动作的MCP工具调用。输入触发调用的指令，返回MCP调用状态与动作执行状态。
+               处理机器人双手向上欢呼动作的MCP工具调用。输入触发调用的指令，返回MCP调用状态与动作执行状态。
 
-&#x20;           适用于：庆祝胜利、节日氛围、激励情绪等场景。
+               适用于：庆祝胜利、节日氛围、激励情绪等场景。
 
-&#x20;           Handle MCP tool calls for robot's hands-up cheer action. Input instructions triggering the call,&#x20;
+               Handle MCP tool calls for robot's hands-up cheer action. Input instructions triggering the call,    
 
-&#x20;           return MCP call status and action execution status. Suitable for: celebrating victory, festival atmosphere, boosting morale, etc.
+               return MCP call status and action execution status. Suitable for: celebrating victory, festival atmosphere, boosting morale, etc.
 
-&#x20;   '''
+       '''
 
-&#x20;   add\_tool(
+       add\_tool(
 
-&#x20;       (
+           (
 
-&#x20;           "action.cheer\_up",
+               "action.cheer\_up",
 
-&#x20;           tool\_description,
+               tool\_description,
 
-&#x20;           props,
+               props,
 
-&#x20;           cheer\_up,  # 关联“加油鼓励”动作的执行函数（对应指令码206）
+               cheer\_up,  # 关联“加油鼓励”动作的执行函数（对应指令码206）
 
-&#x20;       )
+           )
 
-&#x20;   )
+       )
 
-&#x20;   logger.debug("\[ActionManager] 注册action.cheer\_up工具成功")
+       logger.debug("\[ActionManager] 注册action.cheer\_up工具成功")
 ```
 
 ### 3.5 输出示例
