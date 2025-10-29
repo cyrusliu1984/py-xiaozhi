@@ -100,7 +100,7 @@ OLLAMA\_HOST=0.0.0.0:11434 ollama serve > /dev/null 2>&1 < /dev/null &
 
 #### 3.2.1 LLM 大语言模型
 
-![参数设置](documents/docs/mcp/knowledgebase/zhishi1.png)
+![参数设置](zhishi1.png)
 
 * 模型来源：二选一（Ollama 本地部署 / Remote API 远程调用）
 
@@ -127,10 +127,9 @@ OLLAMA\_HOST=0.0.0.0:11434 ollama serve > /dev/null 2>&1 < /dev/null &
 通过 WeKnora 页面上传知识库关联文件，支持补充硬件开源等核心内容。
 
 ### 4.1 上传入口
-![上传入口](documents/docs/mcp/knowledgebase/zhishi2.png)
+![上传入口](zhishi2.png)
 
 在 WeKnora 知识库管理页面（以 “青龙” 知识库为例，进入对应知识库详情页），找到 **“上传知识”** 功能入口（通常为按钮或图标形式），点击后触发文件选择窗口，即可选择本地文件上传。
 
 > 提示：支持上传的文件格式通常包括 PDF、DOCX、TXT 等，具体以 WeKnora 页面提示为准；建议上传前整理好 “青龙机器人” 的硬件参数表、开源文档等核心内容，确保知识库信息完整。
 
-> （注：文档部分内容可能由 AI 生成）
