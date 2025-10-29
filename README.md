@@ -32,7 +32,7 @@ py-xiaozhi 是一个使用 Python 实现的小智语音客户端，旨在通过�
 - **地图工具**：高德地图服务，支持地理编码、路径规划、周边搜索、天气查询
 - **八字命理工具**：传统八字命理分析，支持八字计算、婚姻分析、黄历查询
 - **摄像头工具**：图像捕获和AI分析，支持拍照识别和智能问答
-- **🎯动作工具**：通过udp调用，可以配合青龙lite完成10种上肢动作|[新增功能](documents/docs/mcp/action/青龙 lite 语音控制文档.md)
+- **🎯动作工具**：通过udp调用，可以配合青龙lite完成10种上肢动作|[新增功能](documents/docs/mcp/action/青龙lite语音控制文档.md)
 - **🎯表情工具**：配合青龙lite切换表情|[新增功能](documents/docs/mcp/action/小智设备麦克风配置与问题解决说明文档.md)
 - **🎯导航工具**：通过调用VLN大模型完成导航任务|[新增功能](documents/docs/mcp/navigation/demo.webm)
 - **🎯知识库工具**：配合WeKnora搭建本地知识库 [新增功能](documents/docs/mcp/knowledgebase/小智知识库MCP说明文档.md)
