@@ -133,10 +133,7 @@ OLLAMA\_HOST=0.0.0.0:11434 ollama serve > /dev/null 2>&1 < /dev/null &
 
 > 提示：支持上传的文件格式通常包括 PDF、DOCX、TXT 等，具体以 WeKnora 页面提示为准；建议上传前整理好 “青龙机器人” 的硬件参数表、开源文档等核心内容，确保知识库信息完整。
 
-<video 
-  src="demo.mp4"  
-  controls                              
-  width="100%"                                 
->
-  您的设备不支持视频播放
+<video width="640" height="360" controls>
+  <source src="demo.mp4" type="video/mp4">
+  您的浏览器不支持视频标签。
 </video>

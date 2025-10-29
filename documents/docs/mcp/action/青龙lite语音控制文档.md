@@ -364,10 +364,7 @@ def \_register\_action\_cheer\_up(self, add\_tool, PropertyList, Property, Prope
 \==================================================
 ```
 
-<video 
-  src="demo.mp4"  
-  controls                              
-  width="100%"                                 
->
-  您的设备不支持视频播放
+<video width="640" height="360" controls>
+  <source src="demo.mp4" type="video/mp4">
+  您的浏览器不支持视频标签。
 </video>
