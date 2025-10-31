@@ -113,7 +113,7 @@ py-xiaozhi/
 
 ```bash
 # 克隆项目
-git clone https://github.com/huangjunsen0406/py-xiaozhi.git
+git clone https://github.com/cyrusliu1984/py-xiaozhi.git
 cd py-xiaozhi
 
 # 安装依赖
